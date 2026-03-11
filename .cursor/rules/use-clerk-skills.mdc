@@ -1,0 +1,16 @@
+---
+description: Use project Clerk skills for authentication work
+globs: "**/*auth*"
+alwaysApply: false
+---
+
+# Use Clerk skills for auth
+
+When working on authentication, sign-in/sign-up, middleware for auth, or Clerk-related code in this project, use the skills in `.cursor/skills/`:
+
+- **clerk** — Router; start here for any Clerk/auth task so the right sub-skill is used.
+- **clerk-setup** — Adding or configuring Clerk.
+- **clerk-custom-ui** — Custom auth UI and appearance.
+- **clerk-nextjs-patterns** — Next.js middleware, Server Actions, caching.
+
+Read the relevant skill's SKILL.md and follow its instructions so implementation matches this project's setup.

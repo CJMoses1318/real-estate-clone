@@ -1,0 +1,16 @@
+---
+description: Use project Sanity skills for CMS, schema, and content work
+globs: "**/*sanity*,**/sanity/**/*,**/schemas/**/*,**/*groq*"
+alwaysApply: false
+---
+
+# Use Sanity skills for CMS work
+
+When working on Sanity schemas, GROQ queries, content modeling, Studio, TypeGen, Visual Editing, or any Sanity/CMS-related code in this project, use the skills in `.cursor/skills/`:
+
+- **sanity-best-practices** — Start here for schemas, GROQ, TypeGen, Visual Editing, images, Portable Text, Studio structure, migrations, and framework integrations (Next.js, etc.). Read the SKILL.md and load only the reference files that match the task.
+- **content-modeling-best-practices** — Content architecture, schema design, content reuse, references vs embedded objects, taxonomies.
+- **content-experimentation-best-practices** — A/B testing, experiment design, metrics, CMS-managed variants.
+- **seo-aeo-best-practices** — Metadata, Open Graph, sitemaps, JSON-LD, EEAT, AI-overview readiness.
+
+Read the relevant skill's SKILL.md and follow its instructions so implementation matches this project's Sanity setup.
