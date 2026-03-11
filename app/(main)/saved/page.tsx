@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { sanityFetch } from "@/lib/sanity/live";
 import { USER_SAVED_LISTINGS_QUERY } from "@/lib/sanity/queries";
+import type { PropertyCardData } from "@/types";
 
 export default async function SavedListingsPage() {
   const { userId } = await auth();
@@ -28,7 +29,10 @@ export default async function SavedListingsPage() {
       </div>
 
       {savedProperties && savedProperties.length > 0 ? (
-        <PropertyGrid properties={savedProperties} showRemoveButton />
+        <PropertyGrid
+          properties={savedProperties as PropertyCardData[]}
+          showRemoveButton
+        />
       ) : (
         <EmptyState
           icon={Heart}

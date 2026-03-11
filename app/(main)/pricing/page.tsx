@@ -41,8 +41,8 @@ export default function PricingPage() {
         </ul>
       </div>
 
-      {/* Clerk Pricing Table */}
-      <section className="max-w-md mx-auto" aria-label="Subscribe">
+      {/* Clerk Pricing Table — subscribe to agent plan */}
+      <section className="max-w-4xl mx-auto" aria-label="Subscribe to a plan">
         <PricingTable />
       </section>
     </main>

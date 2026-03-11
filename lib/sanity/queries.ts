@@ -26,6 +26,22 @@ export const FEATURED_PROPERTIES_QUERY = defineQuery(/* groq */ `
   }
 `);
 
+// Fallback: recent active listings when no featured (same shape as featured for homepage grid)
+export const RECENT_PROPERTIES_QUERY = defineQuery(/* groq */ `
+  *[_type == "property" && status == "active"] | order(createdAt desc)[0...6] {
+    _id,
+    title,
+    "slug": slug.current,
+    price,
+    bedrooms,
+    bathrooms,
+    squareFeet,
+    address,
+    "image": images[0] { ${imageFragment} },
+    location
+  }
+`);
+
 // Property search with filters
 export const PROPERTIES_SEARCH_QUERY = defineQuery(/* groq */ `
   *[_type == "property" && status == "active"
@@ -50,6 +66,8 @@ export const PROPERTIES_SEARCH_QUERY = defineQuery(/* groq */ `
     "slug": slug.current,
     price,
     originalPrice,
+    propertyType,
+    status,
     bedrooms,
     bathrooms,
     squareFeet,
@@ -90,6 +108,7 @@ export const PROPERTY_DETAIL_QUERY = defineQuery(/* groq */ `
   *[_type == "property" && _id == $id][0] {
     _id,
     title,
+    "slug": slug.current,
     description,
     price,
     propertyType,
@@ -102,6 +121,7 @@ export const PROPERTY_DETAIL_QUERY = defineQuery(/* groq */ `
     location,
     images[] { ${imageFragment} },
     amenities,
+    createdAt,
     agent-> {
       _id,
       userId,
@@ -151,6 +171,7 @@ export const AGENT_LEADS_QUERY = defineQuery(/* groq */ `
 export const USER_PROFILE_QUERY = defineQuery(/* groq */ `
   *[_type == "user" && clerkId == $clerkId][0] {
     _id,
+    clerkId,
     name,
     email,
     phone,
@@ -219,12 +240,14 @@ export const USER_SAVED_LISTINGS_QUERY = defineQuery(/* groq */ `
       title,
       "slug": slug.current,
       price,
+      propertyType,
       bedrooms,
       bathrooms,
       squareFeet,
       address,
       "image": images[0] { ${imageFragment} },
-      status
+      status,
+      createdAt
     }
   }.savedListings
 `);

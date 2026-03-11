@@ -1,5 +1,6 @@
 "use client";
 
+import { Show } from "@clerk/nextjs";
 import { Home, Mail } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -138,7 +139,7 @@ export function Footer() {
             </ul>
           </nav>
 
-          {/* For Agents Column */}
+          {/* For Agents Column — dashboard links gated by plan */}
           <nav aria-label="Agent resources">
             <h3 className="font-semibold font-heading mb-4">For Agents</h3>
             <ul className="space-y-3 text-sm">
@@ -150,30 +151,32 @@ export function Footer() {
                   Become an Agent
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="/dashboard"
-                  className="text-muted-foreground hover:text-foreground transition-colors duration-200"
-                >
-                  Agent Dashboard
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard/listings"
-                  className="text-muted-foreground hover:text-foreground transition-colors duration-200"
-                >
-                  Manage Listings
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard/leads"
-                  className="text-muted-foreground hover:text-foreground transition-colors duration-200"
-                >
-                  Lead Inbox
-                </Link>
-              </li>
+              <Show when={{ plan: "agent" }}>
+                <li>
+                  <Link
+                    href="/dashboard"
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                  >
+                    Agent Dashboard
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/dashboard/listings"
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                  >
+                    Manage Listings
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/dashboard/leads"
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                  >
+                    Lead Inbox
+                  </Link>
+                </li>
+              </Show>
             </ul>
           </nav>
 

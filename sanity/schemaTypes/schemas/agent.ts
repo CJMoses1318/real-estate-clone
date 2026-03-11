@@ -1,13 +1,13 @@
 import { defineField, defineType } from "sanity";
 
-export const user = defineType({
-  name: "user",
-  title: "User",
+export const agent = defineType({
+  name: "agent",
+  title: "Agent",
   type: "document",
   fields: [
     defineField({
-      name: "clerkId",
-      title: "Clerk ID",
+      name: "userId",
+      title: "Clerk User ID",
       type: "string",
       validation: (Rule) => Rule.required(),
       readOnly: true,
@@ -38,15 +38,26 @@ export const user = defineType({
       },
     }),
     defineField({
-      name: "savedListings",
-      title: "Saved Listings",
-      type: "array",
-      of: [
-        {
-          type: "reference",
-          to: [{ type: "property" }],
-        },
-      ],
+      name: "bio",
+      title: "Bio",
+      type: "text",
+      rows: 4,
+    }),
+    defineField({
+      name: "licenseNumber",
+      title: "License Number",
+      type: "string",
+    }),
+    defineField({
+      name: "agency",
+      title: "Agency",
+      type: "string",
+    }),
+    defineField({
+      name: "onboardingComplete",
+      title: "Onboarding Complete",
+      type: "boolean",
+      initialValue: false,
     }),
     defineField({
       name: "createdAt",

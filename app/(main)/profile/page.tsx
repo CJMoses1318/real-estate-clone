@@ -1,4 +1,4 @@
-import { Protect } from "@clerk/nextjs";
+import { Show } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -38,7 +38,7 @@ export default async function ProfilePage() {
           </CardContent>
         </Card>
 
-        <Protect plan="agent">
+        <Show when={{ plan: "agent" }}>
           <Card>
             <CardHeader>
               <CardTitle>Agent Profile</CardTitle>
@@ -53,7 +53,7 @@ export default async function ProfilePage() {
               </Button>
             </CardContent>
           </Card>
-        </Protect>
+        </Show>
       </div>
     </div>
   );

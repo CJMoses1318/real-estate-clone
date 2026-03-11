@@ -1,5 +1,6 @@
 "use client";
 
+import MapboxGeocoding from "@mapbox/mapbox-sdk/services/geocoding";
 import debounce from "lodash.debounce";
 import { CheckCircle2, Loader2, MapPin, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -74,7 +75,7 @@ export function AddressAutocomplete({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Fetch suggestions from Mapbox
+  // Fetch suggestions from Mapbox using the official SDK
   const fetchSuggestions = useCallback(async (query: string) => {
     const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     if (!token || query.length < 3) {
@@ -84,16 +85,19 @@ export function AddressAutocomplete({
 
     setIsLoading(true);
     try {
-      const encodedQuery = encodeURIComponent(query);
-      // Focus on addresses with country filter for US
-      const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodedQuery}.json?access_token=${token}&types=address&limit=5&country=US`;
+      const geocodingClient = MapboxGeocoding({ accessToken: token });
+      const response = await geocodingClient
+        .forwardGeocode({
+          query,
+          limit: 5,
+          countries: ["US"],
+          types: ["address"],
+        })
+        .send();
 
-      const response = await fetch(url);
-      if (!response.ok) throw new Error("Failed to fetch suggestions");
-
-      const data = await response.json();
-      setSuggestions(data.features || []);
-      setIsOpen(data.features?.length > 0);
+      const features = (response.body?.features ?? []) as MapboxFeature[];
+      setSuggestions(features);
+      setIsOpen(features.length > 0);
     } catch (error) {
       console.error("Autocomplete error:", error);
       setSuggestions([]);

@@ -6,10 +6,10 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { urlFor } from "@/lib/sanity/image";
-import type { Property } from "@/types";
+import type { PropertyCardData } from "@/types";
 
 interface PropertyCardProps {
-  property: Property;
+  property: PropertyCardData;
   onSave?: (propertyId: string) => void;
   isSaved?: boolean;
   showRemoveButton?: boolean;
@@ -21,12 +21,12 @@ export function PropertyCard({
   isSaved,
   showRemoveButton: _showRemoveButton,
 }: PropertyCardProps) {
-  const formatPrice = (price: number) => {
+  const formatPrice = (price: number | undefined) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
       maximumFractionDigits: 0,
-    }).format(price);
+    }).format(price ?? 0);
   };
 
   const handleSaveClick = (e: React.MouseEvent) => {
@@ -50,7 +50,7 @@ export function PropertyCard({
           {property.image?.asset ? (
             <Image
               src={urlFor(property.image).width(600).height(450).url()}
-              alt={property.title}
+              alt={property.title ?? "Property"}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -67,7 +67,7 @@ export function PropertyCard({
           {/* Status Badge */}
           {statusLabel && (
             <Badge
-              variant={property.status === "sold" ? "destructive" : "muted"}
+              variant={property.status === "sold" ? "destructive" : "secondary"}
               className="absolute top-3 left-3 shadow-sm"
             >
               {statusLabel}
@@ -112,7 +112,7 @@ export function PropertyCard({
           {/* Price */}
           <div className="flex items-start justify-between gap-2 mb-2">
             <h3 className="font-bold font-heading text-xl tabular-nums">
-              {formatPrice(property.price)}
+              {formatPrice(property.price ?? undefined)}
             </h3>
           </div>
 
@@ -153,7 +153,7 @@ export function PropertyCard({
             <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
               <MapPin className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
               <span className="line-clamp-1 min-w-0">
-                {property.address.city}, {property.address.state}
+                {property.address.city ?? ""}, {property.address.state ?? ""}
               </span>
             </div>
           )}

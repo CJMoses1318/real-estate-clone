@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Protect,
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from "@clerk/nextjs";
+import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { Heart, Home, LayoutDashboard, Menu, User, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -64,9 +57,9 @@ export function Navbar() {
             >
               Browse Properties
             </Link>
-            <SignedIn>
-              <Protect
-                plan="agent"
+            <Show when="signed-in">
+              <Show
+                when={{ plan: "agent" }}
                 fallback={
                   <Link
                     href="/pricing"
@@ -82,22 +75,22 @@ export function Navbar() {
                 >
                   Dashboard
                 </Link>
-              </Protect>
-            </SignedIn>
-            <SignedOut>
+              </Show>
+            </Show>
+            <Show when="signed-out">
               <Link
                 href="/pricing"
                 className="px-4 py-2 text-sm font-medium text-muted-foreground rounded-lg hover:text-foreground hover:bg-accent transition-[color,background-color] duration-200"
               >
                 Become an Agent
               </Link>
-            </SignedOut>
+            </Show>
           </nav>
         </div>
 
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center gap-2">
-          <SignedIn>
+          <Show when="signed-in">
             <Link
               href="/saved"
               aria-label="Saved properties"
@@ -112,7 +105,7 @@ export function Navbar() {
             >
               <User className="h-5 w-5" aria-hidden="true" />
             </Link>
-            <Protect plan="agent">
+            <Show when={{ plan: "agent" }}>
               <Link
                 href="/dashboard"
                 aria-label="Agent dashboard"
@@ -120,7 +113,7 @@ export function Navbar() {
               >
                 <LayoutDashboard className="h-5 w-5" aria-hidden="true" />
               </Link>
-            </Protect>
+            </Show>
             <div className="ml-2">
               <UserButton
                 appearance={{
@@ -130,8 +123,8 @@ export function Navbar() {
                 }}
               />
             </div>
-          </SignedIn>
-          <SignedOut>
+          </Show>
+          <Show when="signed-out">
             <SignInButton mode="modal">
               <Button variant="ghost" size="sm">
                 Sign In
@@ -140,12 +133,12 @@ export function Navbar() {
             <SignUpButton mode="modal">
               <Button size="sm">Get Started</Button>
             </SignUpButton>
-          </SignedOut>
+          </Show>
         </div>
 
         {/* Mobile Menu */}
         <div className="flex md:hidden items-center gap-2">
-          <SignedIn>
+          <Show when="signed-in">
             <UserButton
               appearance={{
                 elements: {
@@ -153,7 +146,7 @@ export function Navbar() {
                 },
               }}
             />
-          </SignedIn>
+          </Show>
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
               <Button
@@ -195,9 +188,9 @@ export function Navbar() {
                 >
                   Browse Properties
                 </Link>
-                <SignedIn>
-                  <Protect
-                    plan="agent"
+                <Show when="signed-in">
+                  <Show
+                    when={{ plan: "agent" }}
                     fallback={
                       <Link
                         href="/pricing"
@@ -216,9 +209,9 @@ export function Navbar() {
                       <LayoutDashboard className="h-5 w-5" aria-hidden="true" />
                       Agent Dashboard
                     </Link>
-                  </Protect>
-                </SignedIn>
-                <SignedOut>
+                  </Show>
+                </Show>
+                <Show when="signed-out">
                   <Link
                     href="/pricing"
                     onClick={() => setIsOpen(false)}
@@ -226,8 +219,8 @@ export function Navbar() {
                   >
                     Become an Agent
                   </Link>
-                </SignedOut>
-                <SignedIn>
+                </Show>
+                <Show when="signed-in">
                   <div className="h-px bg-border my-2" />
                   <Link
                     href="/saved"
@@ -245,8 +238,8 @@ export function Navbar() {
                     <User className="h-5 w-5" aria-hidden="true" />
                     My Profile
                   </Link>
-                </SignedIn>
-                <SignedOut>
+                </Show>
+                <Show when="signed-out">
                   <div className="h-px bg-border my-2" />
                   <div className="flex flex-col gap-2 px-4 mt-2">
                     <SignInButton mode="modal">
@@ -267,7 +260,7 @@ export function Navbar() {
                       </Button>
                     </SignUpButton>
                   </div>
-                </SignedOut>
+                </Show>
               </nav>
             </SheetContent>
           </Sheet>

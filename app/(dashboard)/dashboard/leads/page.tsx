@@ -30,7 +30,7 @@ export default async function LeadsPage() {
 
   const { data: leads } = await sanityFetch({
     query: AGENT_LEADS_QUERY,
-    params: { agentId: agent._id },
+    params: { agentId: agent?._id },
   });
 
   const formatDate = (date: string) => {

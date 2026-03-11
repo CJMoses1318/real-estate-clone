@@ -16,6 +16,16 @@ const client = createClient({
   useCdn: false,
 });
 
+/** Explicitly publish a document: create/replace at published ID and remove any draft. */
+async function createOrReplaceAndPublish(
+  doc: Parameters<typeof client.createOrReplace>[0],
+) {
+  const tx = client.transaction();
+  tx.createOrReplace(doc);
+  tx.delete(`drafts.${doc._id}`);
+  await tx.commit();
+}
+
 // Check for --clean flag
 const shouldClean = process.argv.includes("--clean");
 
@@ -100,7 +110,7 @@ async function seedAmenities() {
       order: amenity.order,
     };
 
-    await client.createOrReplace(doc);
+    await createOrReplaceAndPublish(doc);
     console.log(`  ✓ Created amenity: ${amenity.label}`);
   }
 
@@ -142,7 +152,7 @@ async function seedAgents() {
       }),
     };
 
-    await client.createOrReplace(doc);
+    await createOrReplaceAndPublish(doc);
     console.log(`  ✓ Created agent: ${agent.name}`);
   }
 
@@ -213,7 +223,7 @@ async function seedProperties() {
       ...(imageAssets.length > 0 && { images: imageAssets }),
     };
 
-    await client.createOrReplace(doc);
+    await createOrReplaceAndPublish(doc);
     console.log(`  ✓ Created property: ${property.title}`);
   }
 
@@ -241,7 +251,7 @@ async function seedUsers() {
       createdAt: new Date().toISOString(),
     };
 
-    await client.createOrReplace(doc);
+    await createOrReplaceAndPublish(doc);
     console.log(`  ✓ Created user: ${user.name}`);
   }
 
@@ -277,7 +287,7 @@ async function seedLeads() {
       createdAt: createdAt.toISOString(),
     };
 
-    await client.createOrReplace(doc);
+    await createOrReplaceAndPublish(doc);
     console.log(`  ✓ Created lead from: ${lead.buyerName}`);
   }
 
