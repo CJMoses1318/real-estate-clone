@@ -1,8 +1,8 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata, Viewport } from "next";
+import dynamic from "next/dynamic";
 import { Geist, Geist_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
-import { SanityLive } from "@/lib/sanity/live";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
@@ -79,6 +79,12 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+const SanityLive = dynamic(
+  () =>
+    import("@/lib/sanity/live").then((mod) => ({ default: mod.SanityLive })),
+  { ssr: true },
+);
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -106,7 +112,7 @@ export default function RootLayout({
         >
           {children}
           <Toaster />
-          <SanityLive />
+          {process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ? <SanityLive /> : null}
         </body>
       </html>
     </ClerkProvider>
